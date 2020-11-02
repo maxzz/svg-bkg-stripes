@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <button @click="addBox">Add stripe</button>
+        <button @click="clearBoxes">Clear boxes</button>
+        <button @click="addBox">Add box</button>
     
         <div class="svg-wrap">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -43,7 +44,19 @@ const enum CONST {
 
 const N_SWATCHES = Object.keys(colors).length;
 
+function getRandomPalleteColor() {
+    // 1. select pallete
+    let keysColors = Object.keys(colors);
+    let whichPallete = rndInt(0, keysColors.length, 0);
+    let pallete = colors[keysColors[whichPallete]];
 
+    // 2. select color from pallete
+    let keys = Object.keys(pallete);
+    let nColors = keys.length;
+    let colorName = keys[rndInt(0, nColors, 0)];
+    let color = pallete[colorName];
+    return color;    
+}
 
 type Box = {
     id: string;
@@ -55,10 +68,10 @@ type Box = {
     cH: number; // color hue
 };
 
-function generateBox(): Box {
+function initBox(): Box {
     return {
         id: Date.now().toString(36),
-        x: 50,
+        x: 50, // TODO: get half of schene width
         y: 50,
         w: 40,
         h: 10,
@@ -68,33 +81,14 @@ function generateBox(): Box {
 }
 
 function generateRandomBox(): Box {
-    let box = generateBox();
+    let box = initBox();
     box.w = rnd(40, CONST.SCENE_W);
     box.h = rnd(2, 10);
     box.x = rnd(0, CONST.SCENE_W - box.w);
     box.y = rnd(0, CONST.SCENE_H - box.h);
     //box.a = rnd(0, 360);
 
-    // 1. select pallete
-    let keysColors = Object.keys(colors);
-    let whichPallete = rndInt(0, keysColors.length, 0);
-    let pallete = colors[keysColors[whichPallete]];
-
-    console.log(`PALLETE: keys = ${keysColors.length} key = ${whichPallete}`);
-    // FIX: colors sometimes not loaded
-    // FIX: color is undefined
-
-    // 2. select color from pallete
-    let keys = Object.keys(pallete);
-    let nColors = keys.length;
-    let colorName = keys[rndInt(0, nColors, 0)];
-    let color = pallete[colorName];
-
-    
-    //console.log('pallete', pallete, 'name', keysColors[whichPallete], colorName, '=', color);
-
-    box.cH = color;
-
+    box.cH = getRandomPalleteColor();
     // box.cH = rnd(0, 36, 0) * 10;
 
     return box;
@@ -119,10 +113,12 @@ export default defineComponent({
 
         onMounted(() => state.boxes.push(...generateRandomBoxes(10)));
 
+        const clearBoxes = () => state.boxes = [];
         const addBox = () => state.boxes.push(generateRandomBox());
 
         return {
             ...state,
+            clearBoxes,
             addBox,
         };
     },
