@@ -315,33 +315,62 @@ export const transparent = 'transparent';
 
 // import https://github.com/egoist/md-colors failed with vite
 
-export const sortedPalletes = {
-    amber,
-    blue,
-    blueGray,
-    brown,
-    cyan,
-    deepOrange,
-    deepPurple,
-    gray,
-    green,
-    indigo,
-    lightBlue,
-    lightGreen,
-    lime,
-    orange,
-    pink,
-    purple,
-    red,
-    teal,
-    yellow,
+export type SwatchBase = {
+    '50': string;
+    '100': string;
+    '200': string;
+    '300': string;
+    '400': string;
+    '500': string;
+    '600': string;
+    '700': string;
+    '800': string;
+    '900': string;
 };
 
-// transparent,
-// black,
-// white,
+export type Swatch = SwatchBase & {
+    a100: string;
+    a200: string;
+    a400: string;
+    a700: string;
+};
 
-export const complete = {
+export type Incomplete = {
+    [key: string]: SwatchBase;
+};
+
+export type Complete = {
+    [key: string]: Swatch;
+};
+
+// export type Swatch = {
+//     '50': string;
+//     '100': string;
+//     '200': string;
+//     '300': string;
+//     '400': string;
+//     '500': string;
+//     '600': string;
+//     '700': string;
+//     '800': string;
+//     '900': string;
+//     a100: string;
+//     a200: string;
+//     a400: string;
+//     a700: string;
+// };
+
+// OK but not what we need:
+
+// export type Incomplete = {
+//     [key in keyof SwatchBase]: Swatch;
+// };
+
+// export type Complete = {
+//     [key in keyof Swatch]: Swatch;
+// };
+
+export const complete: Complete = {
     red,
     pink,
     purple,
@@ -360,7 +389,7 @@ export const complete = {
     deepOrange,
 }
 
-export const incomplete = {
+export const incomplete: Incomplete = {
     brown,
     gray,
     blueGray,

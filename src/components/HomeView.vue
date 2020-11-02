@@ -14,15 +14,16 @@
                     :height="box.h"
                     :transform="`rotate(${box.a})`"
                     transform-origin="50%, 50%"
-                    :fill="`hsla(${box.cH}, 100%, 50%)`"
+                    :fill="box.cH"
                 />
+                <!-- :fill="`hsla(${box.cH}, 100%, 50%)`" -->
             </svg>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent, onMounted, reactive, ref } from "vue";
 import { complete as colors } from '../materialui-swatches';
 
 function rndInt(min: number, max: number, includeMax: 0 | 1 = 1): number {
@@ -41,6 +42,7 @@ const enum CONST {
 }
 
 const N_SWATCHES = Object.keys(colors).length;
+
 
 
 type Box = {
@@ -72,7 +74,29 @@ function generateRandomBox(): Box {
     box.x = rnd(0, CONST.SCENE_W - box.w);
     box.y = rnd(0, CONST.SCENE_H - box.h);
     //box.a = rnd(0, 360);
-    box.cH = rnd(0, 36, 0) * 10;
+
+    // 1. select pallete
+    let keysColors = Object.keys(colors);
+    let whichPallete = rndInt(0, keysColors.length, 0);
+    let pallete = colors[keysColors[whichPallete]];
+
+    console.log(`PALLETE: keys = ${keysColors.length} key = ${whichPallete}`);
+    // FIX: colors sometimes not loaded
+    // FIX: color is undefined
+
+    // 2. select color from pallete
+    let keys = Object.keys(pallete);
+    let nColors = keys.length;
+    let colorName = keys[rndInt(0, nColors, 0)];
+    let color = pallete[colorName];
+
+    
+    //console.log('pallete', pallete, 'name', keysColors[whichPallete], colorName, '=', color);
+
+    box.cH = color;
+
+    // box.cH = rnd(0, 36, 0) * 10;
+
     return box;
 }
 
@@ -83,14 +107,17 @@ function generateRandomBoxes(total: number): Box[] {
 export default defineComponent({
     setup() {
         let state = reactive<{boxes: Box[]}>({
-            boxes: generateRandomBoxes(10)
+            boxes: []
         });
 
-        console.log('colors', colors);
+        // console.log('colors', colors);
+        // console.log(colors.red['500']);
 
         // const timer = setInterval(() => {
         //     state.boxes.forEach((_) => _.a = _.a + 30);
         // }, 1000);
+
+        onMounted(() => state.boxes.push(...generateRandomBoxes(10)));
 
         const addBox = () => state.boxes.push(generateRandomBox());
 
