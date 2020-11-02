@@ -23,6 +23,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
+//import * as colors from '@material-ui/core';
 
 function randomFlt(min: number, max: number, includeMax: 0 | 1 = 1): number {
     return Math.floor(Math.random() * (max - min + includeMax)) + min;
@@ -82,6 +83,8 @@ export default defineComponent({
             boxes: generateRandomBoxes(10)
         });
 
+        //console.log('colors', colors);
+
         // const timer = setInterval(() => {
         //     state.boxes.forEach((_) => _.a = _.a + 30);
         // }, 1000);
@@ -105,7 +108,7 @@ export default defineComponent({
     .svg-wrap {
         svg {
             width: 80vw;
-            boder: 1px solid red;
+            border: 4px solid white;
             //height: 400px;
         }
     }
