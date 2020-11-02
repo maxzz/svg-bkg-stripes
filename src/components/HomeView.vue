@@ -104,16 +104,20 @@ export default defineComponent({
             boxes: []
         });
 
-        // console.log('colors', colors);
-        // console.log(colors.red['500']);
-
         // const timer = setInterval(() => {
         //     state.boxes.forEach((_) => _.a = _.a + 30);
         // }, 1000);
 
         onMounted(() => state.boxes.push(...generateRandomBoxes(10)));
 
-        const clearBoxes = () => state.boxes = [];
+        // const clearBoxes = () => {
+        //     console.log('before', state.boxes);
+        //     state.boxes.length = 0;
+        //     console.log('after ', state.boxes);
+        // };
+        //const clearBoxes = () => state.boxes = reactive([]);
+        const clearBoxes = () => state.boxes.length = 0;
+
         const addBox = () => state.boxes.push(generateRandomBox());
 
         return {
