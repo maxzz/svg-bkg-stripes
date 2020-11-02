@@ -1,4 +1,5 @@
 <template>
+    <button @click="addBox">Add stripe</button>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
         <rect width="100" height="100" fill="tomato" />
         <rect
@@ -40,16 +41,29 @@ function generateBox(): Box {
 
 export default defineComponent({
     setup() {
-        const boxes = reactive<Box[]>([generateBox()]);
+        let state = reactive<{boxes: Box[]}>({
+            boxes: []
+        });
 
         //const timer = setInterval(() => boxes[0].a = boxes[0].a + 10, 1000);
+        const timer = setInterval(() => {
+            state.boxes.forEach((_) => _.a = _.a + 10);
+        }, 1000);
+
+        const addBox = () => {
+            let box = generateBox();
+            box.x = Math.random() * 50;
+            state.boxes.push(box);
+            console.log('aa', state.boxes);
+        };
 
         return {
-            boxes,
+            ...state,
+            addBox,
         };
     },
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 </style>

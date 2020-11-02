@@ -1,14 +1,14 @@
 <template>
-  <HomeView msg="Hello Vue 3.0 + Vite" />
+    <HomeView />
 </template>
 
 <script>
-import HomeView from './components/HomeView.vue'
+import HomeView from "./components/HomeView.vue";
 
 export default {
-  name: 'App',
-  components: {
-    HomeView
-  }
-}
+    name: "App",
+    components: {
+        HomeView,
+    },
+};
 </script>
