@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
-import { names as colors } from '../materialui-swatches';
+import { complete as colors } from '../materialui-swatches';
 
 function rndInt(min: number, max: number, includeMax: 0 | 1 = 1): number {
     return Math.floor(Math.random() * (max - min + includeMax)) + min;

@@ -315,7 +315,7 @@ export const transparent = 'transparent';
 
 // import https://github.com/egoist/md-colors failed with vite
 
-export const names = {
+export const sortedPalletes = {
     amber,
     blue,
     blueGray,
@@ -340,3 +340,28 @@ export const names = {
 // transparent,
 // black,
 // white,
+
+export const complete = {
+    red,
+    pink,
+    purple,
+    deepPurple,
+    indigo,
+    blue,
+    lightBlue,
+    cyan,
+    teal,
+    green,
+    lightGreen,
+    lime,
+    yellow,
+    amber,
+    orange,
+    deepOrange,
+}
+
+export const incomplete = {
+    brown,
+    gray,
+    blueGray,
+}
