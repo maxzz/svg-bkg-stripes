@@ -317,7 +317,6 @@ export const transparent = 'transparent';
 
 export const names = {
     amber,
-    black,
     blue,
     blueGray,
     brown,
@@ -335,7 +334,9 @@ export const names = {
     purple,
     red,
     teal,
-    transparent,
-    white,
     yellow,
 };
+
+// transparent,
+// black,
+// white,

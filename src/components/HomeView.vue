@@ -23,9 +23,9 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
-import * as colors from '../materialui-swatches';
+import { names as colors } from '../materialui-swatches';
 
-function randomFlt(min: number, max: number, includeMax: 0 | 1 = 1): number {
+function rndInt(min: number, max: number, includeMax: 0 | 1 = 1): number {
     return Math.floor(Math.random() * (max - min + includeMax)) + min;
 }
 
@@ -39,6 +39,9 @@ const enum CONST {
     SCENE_W = 100,
     SCENE_H = 100,
 }
+
+const N_SWATCHES = Object.keys(colors).length;
+
 
 type Box = {
     id: string;
