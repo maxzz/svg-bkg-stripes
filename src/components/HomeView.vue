@@ -114,6 +114,29 @@
         return Array.from(Array(total), (v, i) => generateRandomBox());
     }
 
+    function useTimeout(timeoutFunc: () => void) {
+        let timeoutID = 0;
+
+        const onRotate = (e: MouseEvent) => {
+            let checked = (e.target as HTMLInputElement).checked;
+            if (checked) {
+                if (timeoutID) {
+                    clearInterval(timeoutID);
+                    timeoutID = 0;
+                }
+                timeoutID = window.setInterval(timeoutFunc, 1000);
+            } else {
+                if (timeoutID) {
+                    clearInterval(timeoutID);
+                    timeoutID = 0;
+                }
+            }
+        };
+        return {
+            onRotate
+        }
+    }
+
     export default defineComponent({
         setup() {
             let state = reactive< { boxes: Box[]; optRotate: boolean } >({
@@ -127,25 +150,9 @@
             const addBox = () => state.boxes.push(generateRandomBox());
             const addBoxes = () => state.boxes.push(...generateRandomBoxes(10));
 
-            let timeoutID = 0;
-
-            const onRotate = (e: MouseEvent) => {
-                let checked = (e.target as HTMLInputElement).checked;
-                if (checked) {
-                    if (timeoutID) {
-                        clearInterval(timeoutID);
-                        timeoutID = 0;
-                    }
-                    timeoutID = window.setInterval(() => {
-                        state.boxes.forEach((_) => _.a = _.a + 30);
-                    }, 1000);
-                } else {
-                    if (timeoutID) {
-                        clearInterval(timeoutID);
-                        timeoutID = 0;
-                    }
-                }
-            };
+            const { onRotate } = useTimeout(() => {
+                state.boxes.forEach((_) => _.a = _.a + 30);
+            });
 
             return {
                 ...state,
