@@ -16,18 +16,18 @@
                 </defs>
 
                 <rect width="100" height="100" stroke="url(#bkg-frame)" stroke-width=".5" fill="aliceblue" />
-
-                <rect
-                    v-for="box in boxes"
-                    :key="box.id"
-                    :x="box.x"
-                    :y="box.y"
-                    :width="box.w"
-                    :height="box.h"
-                    :transform="`rotate(${box.a})`"
-                    :fill="box.cH"
-                    style="transform-origin: 50% 50%"
-                />
+                <g style="transform-origin: 50% 50%">
+                    <rect
+                        v-for="box in boxes"
+                        :key="box.id"
+                        :x="box.x"
+                        :y="box.y"
+                        :width="box.w"
+                        :height="box.h"
+                        :transform="`rotate(${box.a})`"
+                        :fill="box.cH"
+                    />
+                </g>
             </svg>
         </div>
         <div class="stats">Total boxes: {{boxes.length}}</div>
