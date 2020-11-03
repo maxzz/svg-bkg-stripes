@@ -16,20 +16,25 @@
                 </defs>
 
                 <rect width="100" height="100" stroke="url(#bkg-frame)" stroke-width=".5" fill="aliceblue" />
-                <g style="transform-origin: 50% 50%">
-                    <rect
-                        v-for="box in boxes"
-                        :key="box.id"
-                        :x="box.x"
-                        :y="box.y"
-                        :width="box.w"
-                        :height="box.h"
-                        :transform="`rotate(${box.a})`"
-                        :fill="box.cH"
-                    />
-                </g>
+                
+                <rect x="50" y="50" width="2" height="2" stroke="red" stroke-width="1" fill="tomato" />
+
+                <rect
+                    v-for="box in boxes"
+                    :key="box.id"
+                    :x="box.x"
+                    :y="box.y"
+                    :width="box.w"
+                    :height="box.h"
+                    :fill="box.cH"
+                    :style="`transform-origin: center; transform: rotate(${box.a}deg)`"
+                />
+                <!-- :transform="`rotate(${box.a})`" -->
             </svg>
         </div>
+
+        <div v-if="boxes.length" class="css-box" :style="`transform-origin: center; transform: rotate(${boxes[0].a}deg)`"></div>
+
         <div class="stats">Total boxes: {{boxes.length}}</div>
         <div class="controls">
             <label>
@@ -170,6 +175,7 @@
         background-color: tomato;
         width: 100%;
         height: 100%;
+        position: relative;
     }
     .controls {
         padding: 1em 0;
@@ -186,5 +192,10 @@
             border: 4px solid white;
             //height: 400px;
         }
+    }
+    .css-box {
+        width: 300px;
+        height: 10px;
+        background-color: red;
     }
 </style>
