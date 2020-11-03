@@ -33,112 +33,124 @@
         <div class="stats">Total boxes: {{boxes.length}}</div>
         <div class="controls">
             <label>
-                <input type="checkbox" v-model="optRotate"> Rotate
+                <input type="checkbox" v-model="optRotate" @click="onRotate"> Rotate
             </label>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref } from "vue";
-import { complete as colors } from '../materialui-swatches';
+    import { defineComponent, onMounted, reactive, ref, watch } from "vue";
+    import { complete as colors } from '../materialui-swatches';
 
-function rndInt(min: number, max: number, includeMax: 0 | 1 = 1): number {
-    return Math.floor(Math.random() * (max - min + includeMax)) + min;
-}
+    function rndInt(min: number, max: number, includeMax: 0 | 1 = 1): number {
+        return Math.floor(Math.random() * (max - min + includeMax)) + min;
+    }
 
-function rnd(min: number, max: number, includeMax: 0 | 1 = 1): number {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + includeMax) + min);
-}
+    function rnd(min: number, max: number, includeMax: 0 | 1 = 1): number {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + includeMax) + min);
+    }
 
-const enum CONST {
-    SCENE_W = 100,
-    SCENE_H = 100,
-}
+    const enum CONST {
+        SCENE_W = 100,
+        SCENE_H = 100,
+    }
 
-const N_SWATCHES = Object.keys(colors).length;
+    const N_SWATCHES = Object.keys(colors).length;
 
-function getRandomPalleteColor() {
-    // 1. select pallete
-    let keysColors = Object.keys(colors);
-    let whichPallete = rndInt(0, keysColors.length, 0);
-    let pallete = colors[keysColors[whichPallete]];
+    function getRandomPalleteColor() {
+        // 1. select pallete
+        let keysColors = Object.keys(colors);
+        let whichPallete = rndInt(0, keysColors.length, 0);
+        let pallete = colors[keysColors[whichPallete]];
 
-    // 2. select color from pallete
-    let keys = Object.keys(pallete);
-    let nColors = keys.length;
-    let colorName = keys[rndInt(0, nColors, 0)];
-    let color = pallete[colorName];
-    return color;    
-}
+        // 2. select color from pallete
+        let keys = Object.keys(pallete);
+        let nColors = keys.length;
+        let colorName = keys[rndInt(0, nColors, 0)];
+        let color = pallete[colorName];
+        return color;    
+    }
 
-type Box = {
-    id: string;
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-    a: number; // angle
-    cH: number; // color hue
-};
-
-function initBox(): Box {
-    return {
-        id: Date.now().toString(36),
-        x: 50, // TODO: get half of schene width
-        y: 50,
-        w: 40,
-        h: 10,
-        a: 0,
-        cH: 0,
+    type Box = {
+        id: string;
+        x: number;
+        y: number;
+        w: number;
+        h: number;
+        a: number; // angle
+        cH: number; // color hue
     };
-}
 
-function generateRandomBox(): Box {
-    let box = initBox();
-    box.w = rnd(40, CONST.SCENE_W);
-    box.h = rnd(2, 5);
-    box.x = rnd(0, CONST.SCENE_W - box.w);
-    box.y = rnd(0, CONST.SCENE_H - box.h);
-    //box.a = rnd(0, 360);
-
-    box.cH = getRandomPalleteColor();
-    // box.cH = rnd(0, 36, 0) * 10;
-
-    return box;
-}
-
-function generateRandomBoxes(total: number): Box[] {
-    return Array.from(Array(total), (v, i) => generateRandomBox());
-}
-
-export default defineComponent({
-    setup() {
-        let state = reactive< { boxes: Box[]; optRotate: boolean } >({
-            boxes: [],
-            optRotate: false,
-        });
-
-        // const timer = setInterval(() => {
-        //     state.boxes.forEach((_) => _.a = _.a + 30);
-        // }, 1000);
-
-        onMounted(() => state.boxes.push(...generateRandomBoxes(1)));
-
-        const clearBoxes = () => state.boxes.length = 0;
-        const addBox = () => state.boxes.push(generateRandomBox());
-        const addBoxes = () => state.boxes.push(...generateRandomBoxes(10));
-
+    function initBox(): Box {
         return {
-            ...state,
-            clearBoxes,
-            addBox,
-            addBoxes,
+            id: Date.now().toString(36),
+            x: 50, // TODO: get half of schene width
+            y: 50,
+            w: 40,
+            h: 10,
+            a: 0,
+            cH: 0,
         };
-    },
-});
+    }
+
+    function generateRandomBox(): Box {
+        let box = initBox();
+        box.w = rnd(40, CONST.SCENE_W);
+        box.h = rnd(2, 5);
+        box.x = rnd(0, CONST.SCENE_W - box.w);
+        box.y = rnd(0, CONST.SCENE_H - box.h);
+        //box.a = rnd(0, 360);
+
+        box.cH = getRandomPalleteColor();
+        // box.cH = rnd(0, 36, 0) * 10;
+
+        return box;
+    }
+
+    function generateRandomBoxes(total: number): Box[] {
+        return Array.from(Array(total), (v, i) => generateRandomBox());
+    }
+
+    export default defineComponent({
+        setup() {
+            let state = reactive< { boxes: Box[]; optRotate: boolean } >({
+                boxes: [],
+                optRotate: false,
+            });
+
+            onMounted(() => state.boxes.push(...generateRandomBoxes(1)));
+
+            const clearBoxes = () => state.boxes.length = 0;
+            const addBox = () => state.boxes.push(generateRandomBox());
+            const addBoxes = () => state.boxes.push(...generateRandomBoxes(10));
+
+            let timeoutID = 0;
+
+            const onRotate = (e: MouseEvent) => {
+                let checked = (e.target as HTMLInputElement).checked;
+                if (checked) {
+                    // timeoutID = setInterval(() => {
+                    //     state.boxes.forEach((_) => _.a = _.a + 30);
+                    // }, 1000);
+                }
+            };
+
+            // const timer = setInterval(() => {
+            //     state.boxes.forEach((_) => _.a = _.a + 30);
+            // }, 1000);
+
+            return {
+                ...state,
+                clearBoxes,
+                addBox,
+                addBoxes,
+                onRotate,
+            };
+        },
+    });
 </script>
 
 <style lang="scss">
