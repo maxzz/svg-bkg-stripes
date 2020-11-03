@@ -1,7 +1,10 @@
 <template>
     <div class="container">
-        <button @click="clearBoxes">Clear boxes</button>
-        <button @click="addBox">Add box</button>
+        <div class="controls">
+            <button @click="clearBoxes">Clear boxes</button>
+            <button @click="addBoxes">Add 10 boxes</button>
+            <button @click="addBox">Add box</button>
+        </div>
     
         <div class="svg-wrap">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -20,6 +23,7 @@
                 <!-- :fill="`hsla(${box.cH}, 100%, 50%)`" -->
             </svg>
         </div>
+        <div class="stats">Total boxes: {{boxes.length}}</div>
     </div>
 </template>
 
@@ -108,7 +112,7 @@ export default defineComponent({
         //     state.boxes.forEach((_) => _.a = _.a + 30);
         // }, 1000);
 
-        onMounted(() => state.boxes.push(...generateRandomBoxes(10)));
+        onMounted(() => state.boxes.push(...generateRandomBoxes(1)));
 
         // const clearBoxes = () => {
         //     console.log('before', state.boxes);
@@ -117,13 +121,14 @@ export default defineComponent({
         // };
         //const clearBoxes = () => state.boxes = reactive([]);
         const clearBoxes = () => state.boxes.length = 0;
-
         const addBox = () => state.boxes.push(generateRandomBox());
+        const addBoxes = () => state.boxes.push(...generateRandomBoxes(10));
 
         return {
             ...state,
             clearBoxes,
             addBox,
+            addBoxes,
         };
     },
 });
@@ -134,6 +139,13 @@ export default defineComponent({
         background-color: tomato;
         width: 100%;
         height: 100%;
+    }
+    .controls {
+        padding: 1em 0;
+        button {
+            padding: .4em;
+            margin-left: .2em;
+        }
     }
     .svg-wrap {
         svg {
