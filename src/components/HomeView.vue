@@ -8,7 +8,15 @@
     
         <div class="svg-wrap">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-                <rect width="100" height="100" stroke="black" stroke-width=".5" fill="aliceblue" />
+                <defs>
+                    <linearGradient id="bkg-frame">
+                        <stop offset="0%"   stop-color="olive" />
+                        <stop offset="100%" stop-color="red" />
+                    </linearGradient>
+                </defs>
+
+                <rect width="100" height="100" stroke="url(#bkg-frame)" stroke-width=".5" fill="aliceblue" />
+
                 <rect
                     v-for="box in boxes"
                     :key="box.id"
@@ -20,10 +28,14 @@
                     transform-origin="50%, 50%"
                     :fill="box.cH"
                 />
-                <!-- :fill="`hsla(${box.cH}, 100%, 50%)`" -->
             </svg>
         </div>
         <div class="stats">Total boxes: {{boxes.length}}</div>
+        <div class="controls">
+            <label>
+                <input type="checkbox" v-model="optRotate"> Rotate
+            </label>
+        </div>
     </div>
 </template>
 
@@ -87,7 +99,7 @@ function initBox(): Box {
 function generateRandomBox(): Box {
     let box = initBox();
     box.w = rnd(40, CONST.SCENE_W);
-    box.h = rnd(2, 10);
+    box.h = rnd(2, 5);
     box.x = rnd(0, CONST.SCENE_W - box.w);
     box.y = rnd(0, CONST.SCENE_H - box.h);
     //box.a = rnd(0, 360);
@@ -104,8 +116,9 @@ function generateRandomBoxes(total: number): Box[] {
 
 export default defineComponent({
     setup() {
-        let state = reactive<{boxes: Box[]}>({
-            boxes: []
+        let state = reactive< { boxes: Box[]; optRotate: boolean } >({
+            boxes: [],
+            optRotate: false,
         });
 
         // const timer = setInterval(() => {
@@ -114,12 +127,6 @@ export default defineComponent({
 
         onMounted(() => state.boxes.push(...generateRandomBoxes(1)));
 
-        // const clearBoxes = () => {
-        //     console.log('before', state.boxes);
-        //     state.boxes.length = 0;
-        //     console.log('after ', state.boxes);
-        // };
-        //const clearBoxes = () => state.boxes = reactive([]);
         const clearBoxes = () => state.boxes.length = 0;
         const addBox = () => state.boxes.push(generateRandomBox());
         const addBoxes = () => state.boxes.push(...generateRandomBoxes(10));
@@ -142,6 +149,8 @@ export default defineComponent({
     }
     .controls {
         padding: 1em 0;
+        user-select: none;
+
         button {
             padding: .4em;
             margin-left: .2em;
