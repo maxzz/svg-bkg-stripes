@@ -25,8 +25,8 @@
                     :width="box.w"
                     :height="box.h"
                     :transform="`rotate(${box.a})`"
-                    transform-origin="50%, 50%"
                     :fill="box.cH"
+                    style="transform-origin: 50% 50%"
                 />
             </svg>
         </div>
