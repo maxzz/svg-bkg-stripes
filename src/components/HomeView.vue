@@ -132,15 +132,20 @@
             const onRotate = (e: MouseEvent) => {
                 let checked = (e.target as HTMLInputElement).checked;
                 if (checked) {
-                    // timeoutID = setInterval(() => {
-                    //     state.boxes.forEach((_) => _.a = _.a + 30);
-                    // }, 1000);
+                    if (timeoutID) {
+                        clearInterval(timeoutID);
+                        timeoutID = 0;
+                    }
+                    timeoutID = window.setInterval(() => {
+                        state.boxes.forEach((_) => _.a = _.a + 30);
+                    }, 1000);
+                } else {
+                    if (timeoutID) {
+                        clearInterval(timeoutID);
+                        timeoutID = 0;
+                    }
                 }
             };
-
-            // const timer = setInterval(() => {
-            //     state.boxes.forEach((_) => _.a = _.a + 30);
-            // }, 1000);
 
             return {
                 ...state,
