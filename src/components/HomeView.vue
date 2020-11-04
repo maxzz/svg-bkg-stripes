@@ -101,14 +101,10 @@
     function generateRandomBox(): Box {
         let box = initBox();
         box.w = rnd(40, CONST.SCENE_W);
-        box.h = rnd(2, 5);
+        box.h = rnd(1, 3);
         box.x = rnd(0, CONST.SCENE_W - box.w);
         box.y = rnd(0, CONST.SCENE_H - box.h);
-        //box.a = rnd(0, 360);
-
         box.cH = getRandomPalleteColor();
-        // box.cH = rnd(0, 36, 0) * 10;
-
         return box;
     }
 
@@ -153,7 +149,7 @@
             const addBoxes = () => state.boxes.push(...generateRandomBoxes(10));
 
             const { onRotate } = useTimeout(() => {
-                state.boxes.forEach((_) => _.a = _.a + 30);
+                state.boxes.forEach((_) => _.a = (_.a + 30) % 360);
             });
 
             return {
