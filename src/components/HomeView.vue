@@ -22,13 +22,34 @@
                 <rect
                     v-for="box in boxes"
                     :key="box.id"
+                    x="0"
+                    y="0"
+                    width="2"
+                    height="2"
+                    fill="green"
+                    :transform ="`translate(${box.x + box.w / 2}, ${box.y + box.h / 2})`"
+                />
+                <rect
+                    v-for="box in boxes"
+                    :key="box.id"
+                    x="0"
+                    y="0"
+                    :width="box.w"
+                    :height="box.h"
+                    :fill="box.cH"
+                    :transform ="`translate(${box.x + box.w / 2}, ${box.y + box.h / 2}) rotate(${box.a})`"
+                />
+                <!-- <rect
+                    v-for="box in boxes"
+                    :key="box.id"
                     :x="box.x"
                     :y="box.y"
                     :width="box.w"
                     :height="box.h"
                     :fill="box.cH"
                     :style="`transform-origin: center; transform: rotate(${box.a}deg)`"
-                />
+                /> -->
+
                 <!-- with transform-origin: center rotation is around center of svg -->
                 <!-- without transform-origin: center rotation is around 0,0 of svg -->
                 <!-- :transform="`rotate(${box.a})`" -->
