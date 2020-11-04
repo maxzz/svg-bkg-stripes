@@ -36,8 +36,10 @@
         </div>
 
         <div class="css-box-parent">
-            <!-- css-box is always rotated around center with transform-origin: center (or 0,0) ow without -->
-            <div v-if="boxes.length" class="css-box" :style="`transform-origin: center; transform: rotate(${boxes[0].a}deg)`"></div>
+            <!-- css-box is rotated around center of parent; parent transform-origin is ignored -->
+            <div v-if="boxes.length" class="css-box" :style="`transform-origin: 0; transform: rotate(${boxes[0].a}deg)`">
+                .
+            </div>
             <div class="css-box-center"></div>
         </div>
 
@@ -206,6 +208,7 @@
         width: 11px;
         height: 11px;
         background-color: rgba(0, 60, 255, 0.4);
+        transform-origin: 0;
     }
     .css-box-center {
         position: absolute;
@@ -217,8 +220,8 @@
     }
     .css-box {
         position: relative;
-        width: 300px;
-        height: 10px;
+        width: 100px;
+        height: 3px;
         background-color: red;
     }
 </style>
