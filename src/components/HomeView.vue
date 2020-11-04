@@ -29,11 +29,17 @@
                     :fill="box.cH"
                     :style="`transform-origin: center; transform: rotate(${box.a}deg)`"
                 />
+                <!-- with transform-origin: center rotation is around center of svg -->
+                <!-- without transform-origin: center rotation is around 0,0 of svg -->
                 <!-- :transform="`rotate(${box.a})`" -->
             </svg>
         </div>
 
-        <div v-if="boxes.length" class="css-box" :style="`transform-origin: center; transform: rotate(${boxes[0].a}deg)`"></div>
+        <div class="css-box-parent">
+            <!-- css-box is always rotated around center with transform-origin: center (or 0,0) ow without -->
+            <div v-if="boxes.length" class="css-box" :style="`transform-origin: center; transform: rotate(${boxes[0].a}deg)`"></div>
+            <div class="css-box-center"></div>
+        </div>
 
         <div class="stats">Total boxes: {{boxes.length}}</div>
         <div class="controls">
@@ -193,7 +199,24 @@
             //height: 400px;
         }
     }
+    .css-box-parent {
+        position: absolute;
+        top: 100px;
+        left: 320px;
+        width: 11px;
+        height: 11px;
+        background-color: rgba(0, 60, 255, 0.4);
+    }
+    .css-box-center {
+        position: absolute;
+        top: calc(50% - 1px);
+        left: calc(50% - 1px);
+        width: 2px;
+        height: 2px;
+        background-color: green;
+    }
     .css-box {
+        position: relative;
         width: 300px;
         height: 10px;
         background-color: red;
