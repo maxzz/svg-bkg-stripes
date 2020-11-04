@@ -17,8 +17,7 @@
 
                 <rect width="100" height="100" stroke="url(#bkg-frame)" stroke-width=".5" fill="aliceblue" />
                 
-                <circle cx="50%" cy="50%" r="1%" stroke="green" stroke-width=".3%" fill="tomato" />
-                <!-- <rect x="50" y="50" width="1" height="1" stroke="red" stroke-width="1" fill="tomato" /> -->
+                <circle cx="50%" cy="50%" r=".5%" stroke="red" stroke-width=".2%" fill="none" />
 
                 <rect
                     v-for="box in boxes"
