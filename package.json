@@ -1,6 +1,7 @@
 {
     "name": "svg-bkg-stripes",
     "description": "SVG generation playground",
+    "license": "MIT",
     "version": "0.0.1",
     "scripts": {
         "dev": "vite",

@@ -33,13 +33,22 @@
 
         <div class="stats">Total boxes: {{boxes.length}}</div>
         <div class="options">
-            <label>
-                <input type="checkbox" v-model="optRotate" @click="onRotate"> Rotate
-            </label>
-            <label>
-                <input type="checkbox" @click="onGlobalAngleOn"> Use global angle
-            </label>
+            <div class="inp-group">
+                <label>
+                    <input type="checkbox" v-model="optRotate" @click="onRotate"> Rotate
+                </label>
+                <label>
+                    span
+                    <input class="inp-text input-number" type="range" min="0" max="359" step="1" v-model="globalAngle">
+                </label>
+            </div>
+
+            <div class="inp-group">
+                <label>
+                    <input type="checkbox" @click="onGlobalAngleOn"> Use global angle
+                </label>
                 <input class="inp-text input-number" type="number" v-model="globalAngle">
+            </div>
         </div>
     </div>
 </template>
@@ -114,10 +123,14 @@
 
 <style lang="scss">
     .container {
-        background-color: tomato;
         width: 100%;
         height: 100%;
         position: relative;
+
+        background-color: tomato;
+        // background: tomato url(https://i.stack.imgur.com/PEnJm.png);
+        // background: #263039 url(https://i.stack.imgur.com/PEnJm.png);
+        // background-blend-mode: multiply;
 
         .controls {
             padding: 1em 0;
@@ -133,13 +146,22 @@
 
         .options {
             padding: 1em 0;
+
+            display: grid;
         }
     }
 
     // Common controls
 
+    .inp-group {
+        display: grid;
+        grid-auto-flow: column;
+        align-items: center;
+    }
+
     label {
         user-select: none;
+        display: flex;
     }
 
     .inp-btn {
