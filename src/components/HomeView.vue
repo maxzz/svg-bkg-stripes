@@ -26,7 +26,7 @@
                     :width="box.w"
                     :height="box.h"
                     :fill="box.fill"
-                    :transform ="`rotate(${box.angle}, ${box.x + box.w / 2}, ${box.y + box.h / 2}) translate(${box.x}, ${box.y})`"
+                    :transform ="`rotate(${getBoxAngle(box)}, ${box.x + box.w / 2}, ${box.y + box.h / 2}) translate(${box.x}, ${box.y})`"
                 />
             </svg>
         </div>
@@ -38,7 +38,7 @@
                     <input type="checkbox" v-model="optRotate" @click="onRotate"> Rotate
                 </label>
                 <label>
-                    span
+                    Step
                     <input class="inp-text input-number" type="range" min="0" max="359" step="1" v-model="globalAngle">
                 </label>
             </div>
@@ -54,68 +54,109 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent, onMounted, reactive, ref, toRefs, watch } from "vue";
+    import { defineComponent, onMounted, reactive, Ref, ref, toRef, toRefs, watch } from "vue";
     import { Box, generateRandomBox, generateRandomBoxes, useTimeout } from '../core/stripes';
 
     //TODO: Limit number of overlapping bars
+
+    function useGlobalRotationAngle(boxes: Ref<Box[]>) {
+
+        const state = reactive({
+            globalAngle: 0,
+            globalAngleOn: false,
+        });
+        const globalAngleOn = ref(false);
+
+        function onGlobalAngleOn(event: MouseEvent) {
+            state.globalAngleOn = (event.target as HTMLInputElement).checked;
+
+            console.log('onGlobalAngleOn', state.globalAngleOn, boxes.value);
+
+            if (state.globalAngleOn) {
+                boxes.value.forEach((box) => box.angle = state.globalAngle);
+                console.log('a', state.globalAngle, boxes.value);
+            }
+        }
+
+        watch(() => state.globalAngle, () => {
+            if (state.globalAngleOn) {
+                boxes.value.forEach((box) => box.angle = state.globalAngle);
+                console.log('update');
+            }
+        });
+
+        return {
+            //...toRefs(state)
+            state,
+            onGlobalAngleOn
+        }
+    }    
 
     export default defineComponent({
         setup() {
             let state = reactive<{
                     boxes: Box[];
                     optRotate: boolean,
-                    globalAngle: number;
-                    globalAngleOn: boolean;
+                    // globalAngle: number;
+                    // globalAngleOn: boolean;
                 }>({
                 boxes: [],
                 optRotate: false,
-                globalAngle: 0,
-                globalAngleOn: false,
+                // globalAngle: 0,
+                // globalAngleOn: false,
             });
 
             onMounted(() => state.boxes.push(...generateRandomBoxes(1)));
 
-            const clearBoxes = () => state.boxes.length = 0;
+            const clearBoxes = () => state.boxes = [];
             const addBox = () => state.boxes.push(generateRandomBox());
+            //const addBox = () => (state.boxes.push(generateRandomBox()), console.log('bb', gAngle));
             const addBoxes = () => state.boxes.push(...generateRandomBoxes(10));
 
+            const state2 = useGlobalRotationAngle(toRef(state, 'boxes'));
+            // const gAngle = useGlobalRotationAngle(toRef(state, 'boxes'));
+
+            const getBoxAngle = (box: Box) => state2.state.globalAngleOn ? state2.state.globalAngle : box.angle;
+
             const { onRotate } = useTimeout(() => {
-                if (state.globalAngleOn) {
-                    state.globalAngle = (state.globalAngle + 30)  % 360;
+                if (state2.state.globalAngleOn) {
+                    state2.state.globalAngle = (state2.state.globalAngle + 30)  % 360;
                 }
 
                 state.boxes.forEach((box) => {
-                    if (state.globalAngleOn) {
-                       box.angle = state.globalAngle;
+                    if (state2.state.globalAngleOn) {
+                       box.angle = state2.state.globalAngle;
                     } else {
                         box.angle = (box.angle + 30) % 360;
                     }
                 });
             });
 
-            function onGlobalAngleOn(event: MouseEvent) {
-                state.globalAngleOn = (event.target as HTMLInputElement).checked;
+            // function onGlobalAngleOn(event: MouseEvent) {
+            //     state.globalAngleOn = (event.target as HTMLInputElement).checked;
 
-                if (state.globalAngleOn) {
-                    state.boxes.forEach((box) => box.angle = state.globalAngle);
-                    console.log('a', state.globalAngle);
-                }
-            }
+            //     if (state.globalAngleOn) {
+            //         state.boxes.forEach((box) => box.angle = state.globalAngle);
+            //         //console.log('a', state.globalAngle);
+            //     }
+            // }
 
-            watch(() => state.globalAngle, () => {
-                if (state.globalAngleOn) {
-                    state.boxes.forEach((box) => box.angle = state.globalAngle);
-                    console.log('update');
-                }
-            });
+            // watch(() => state.globalAngle, () => {
+            //     if (state.globalAngleOn) {
+            //         state.boxes.forEach((box) => box.angle = state.globalAngle);
+            //         //console.log('update');
+            //     }
+            // });
 
             return {
                 ...toRefs(state),
                 clearBoxes,
                 addBox,
                 addBoxes,
+                getBoxAngle,
                 onRotate,
-                onGlobalAngleOn,
+                ...toRefs(state2.state),
+                onGlobalAngleOn: state2.onGlobalAngleOn,
             };
         },
     });
@@ -146,6 +187,8 @@
 
         .options {
             padding: 1em 0;
+            margin: 0 1rem;
+            background-color: rgb(230, 90, 66);
 
             display: grid;
         }
