@@ -35,7 +35,7 @@
         <div class="options">
             <div class="inp-group">
                 <label>
-                    <input type="checkbox" v-model="optRotate" @click="onRotate"> Rotate
+                    <input type="checkbox" @click="onRotate"> Rotate
                 </label>
                 <label>
                     Step
@@ -63,10 +63,8 @@
         setup() {
             let state = reactive<{
                     boxes: Box[];
-                    optRotate: boolean,
                 }>({
                 boxes: [],
-                optRotate: false,
             });
 
             onMounted(() => state.boxes.push(...generateRandomBoxes(1)));
