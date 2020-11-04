@@ -38,8 +38,8 @@
             </label>
             <label>
                 <input type="checkbox" @click="onGlobalAngleOn"> Use global angle
-                <input class="inp-text input-number" type="text" v-model="globalAngle">
             </label>
+                <input class="inp-text input-number" type="number" v-model="globalAngle">
         </div>
     </div>
 </template>
@@ -92,6 +92,13 @@
                     console.log('a', state.globalAngle);
                 }
             }
+
+            watch(() => state.globalAngle, () => {
+                if (state.globalAngleOn) {
+                    state.boxes.forEach((box) => box.angle = state.globalAngle);
+                    console.log('update');
+                }
+            });
 
             return {
                 ...toRefs(state),
@@ -150,6 +157,6 @@
     }
 
     .input-number {
-        max-width: 3em;
+        max-width: 4em;
     }
 </style>
