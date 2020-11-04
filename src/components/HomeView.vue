@@ -16,8 +16,7 @@
                 </defs>
 
                 <rect width="100" height="100" stroke="url(#bkg-frame)" stroke-width=".5" fill="aliceblue" />
-                
-                <circle cx="50%" cy="50%" r=".5%" stroke="red" stroke-width=".2%" fill="none" />
+                <circle cx="50%" cy="50%" r=".5" stroke="red" stroke-width=".2" fill="none" />
 
                 <rect
                     v-for="box in boxes"
@@ -38,7 +37,7 @@
                 <input type="checkbox" v-model="optRotate" @click="onRotate"> Rotate
             </label>
             <label>
-                <input type="checkbox" v-model="globalAngleOn" @click="onRotate"> Use global angle
+                <input type="checkbox" @click="onGlobalAngleOn"> Use global angle
                 <input class="inp-text input-number" type="number" v-model="globalAngle">
             </label>
         </div>
@@ -70,8 +69,27 @@
             const addBoxes = () => state.boxes.push(...generateRandomBoxes(10));
 
             const { onRotate } = useTimeout(() => {
-                state.boxes.forEach((_) => _.angle = (_.angle + 30) % 360);
+                if (state.globalAngleOn) {
+                    state.globalAngle = (state.globalAngle + 30)  % 360;
+                }
+
+                state.boxes.forEach((_) => {
+                    if (state.globalAngleOn) {
+                       _.angle = state.globalAngle;
+                    } else {
+                        _.angle = (_.angle + 30) % 360;
+                    }
+                });
             });
+
+            function onGlobalAngleOn(event: MouseEvent) {
+                state.globalAngleOn = (event.target as HTMLInputElement).checked;
+                console.log('ev', state.globalAngleOn);
+            }
+
+            // function getAngle(box: Box): number {
+            //     return state.globalAngleOn ? state.globalAngle : box.angle;
+            // }
 
             return {
                 ...state,
@@ -79,6 +97,7 @@
                 addBox,
                 addBoxes,
                 onRotate,
+                onGlobalAngleOn,
             };
         },
     });
