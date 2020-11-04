@@ -24,76 +24,12 @@
                     :key="box.id"
                     x="0"
                     y="0"
-                    width="2"
-                    height="2"
-                    fill="green"
-                    :transform ="`translate(${box.x}, ${box.y})`"
-                />
-                <rect
-                    v-for="box in boxes"
-                    :key="box.id"
-                    x="0"
-                    y="0"
-                    width="2"
-                    height="2"
-                    fill="orange"
-                    :transform ="`translate(${box.x + box.w / 2}, ${box.y + box.h / 2})`"
-                />
-
-                <rect
-                    v-for="box in boxes"
-                    :key="box.id"
-                    x="0"
-                    y="0"
                     :width="box.w"
                     :height="box.h"
                     :fill="box.cH"
                     :transform ="`rotate(${box.a}, ${box.x + box.w / 2}, ${box.y + box.h / 2}) translate(${box.x}, ${box.y})`"
                 />
-                <!-- <rect
-                    v-for="box in boxes"
-                    :key="box.id"
-                    x="0"
-                    y="0"
-                    :width="box.w"
-                    :height="box.h"
-                    :fill="box.cH"
-                    :transform ="`rotate(${box.a}) translate(${box.x + box.w / 2}, ${box.y + box.h / 2})`"
-                /> -->
-                <!-- <rect
-                    v-for="box in boxes"
-                    :key="box.id"
-                    x="0"
-                    y="0"
-                    :width="box.w"
-                    :height="box.h"
-                    :fill="box.cH"
-                    :transform ="`translate(${box.x}, ${box.y}) rotate(${box.a})`"
-                /> -->
-
-                <!-- <rect
-                    v-for="box in boxes"
-                    :key="box.id"
-                    :x="box.x"
-                    :y="box.y"
-                    :width="box.w"
-                    :height="box.h"
-                    :fill="box.cH"
-                    :style="`transform-origin: center; transform: rotate(${box.a}deg)`"
-                /> -->
-
-                <!-- with transform-origin: center rotation is around center of svg -->
-                <!-- without transform-origin: center rotation is around 0,0 of svg -->
-                <!-- :transform="`rotate(${box.a})`" -->
             </svg>
-        </div>
-
-        <div class="css-box-parent">
-            <!-- css-box is rotated around center of parent; parent transform-origin is ignored -->
-            <div v-if="boxes.length" class="css-box" :style="`transform-origin: 0; transform: rotate(${boxes[0].a}deg)`">
-                .
-            </div>
-            <div class="css-box-center"></div>
         </div>
 
         <div class="stats">Total boxes: {{boxes.length}}</div>
@@ -253,28 +189,5 @@
             border: 4px solid white;
             //height: 400px;
         }
-    }
-    .css-box-parent {
-        position: absolute;
-        top: 100px;
-        left: 320px;
-        width: 11px;
-        height: 11px;
-        background-color: rgba(0, 60, 255, 0.4);
-        transform-origin: 0;
-    }
-    .css-box-center {
-        position: absolute;
-        top: calc(50% - 1px);
-        left: calc(50% - 1px);
-        width: 2px;
-        height: 2px;
-        background-color: green;
-    }
-    .css-box {
-        position: relative;
-        width: 100px;
-        height: 3px;
-        background-color: red;
     }
 </style>
