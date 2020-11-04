@@ -27,8 +27,19 @@
                     width="2"
                     height="2"
                     fill="green"
+                    :transform ="`translate(${box.x}, ${box.y})`"
+                />
+                <rect
+                    v-for="box in boxes"
+                    :key="box.id"
+                    x="0"
+                    y="0"
+                    width="2"
+                    height="2"
+                    fill="orange"
                     :transform ="`translate(${box.x + box.w / 2}, ${box.y + box.h / 2})`"
                 />
+
                 <rect
                     v-for="box in boxes"
                     :key="box.id"
@@ -37,8 +48,29 @@
                     :width="box.w"
                     :height="box.h"
                     :fill="box.cH"
-                    :transform ="`translate(${box.x + box.w / 2}, ${box.y + box.h / 2}) rotate(${box.a})`"
+                    :transform ="`rotate(${box.a}, ${box.x + box.w / 2}, ${box.y + box.h / 2}) translate(${box.x}, ${box.y})`"
                 />
+                <!-- <rect
+                    v-for="box in boxes"
+                    :key="box.id"
+                    x="0"
+                    y="0"
+                    :width="box.w"
+                    :height="box.h"
+                    :fill="box.cH"
+                    :transform ="`rotate(${box.a}) translate(${box.x + box.w / 2}, ${box.y + box.h / 2})`"
+                /> -->
+                <!-- <rect
+                    v-for="box in boxes"
+                    :key="box.id"
+                    x="0"
+                    y="0"
+                    :width="box.w"
+                    :height="box.h"
+                    :fill="box.cH"
+                    :transform ="`translate(${box.x}, ${box.y}) rotate(${box.a})`"
+                /> -->
+
                 <!-- <rect
                     v-for="box in boxes"
                     :key="box.id"
