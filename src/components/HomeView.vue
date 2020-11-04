@@ -55,98 +55,43 @@
 
 <script lang="ts">
     import { defineComponent, onMounted, reactive, Ref, ref, toRef, toRefs, watch } from "vue";
-    import { Box, generateRandomBox, generateRandomBoxes, useTimeout } from '../core/stripes';
+    import { Box, generateRandomBox, generateRandomBoxes, useTimeout, useGlobalRotationAngle } from '../core/stripes';
 
     //TODO: Limit number of overlapping bars
-
-    function useGlobalRotationAngle(boxes: Ref<Box[]>) {
-
-        const state = reactive({
-            globalAngle: 0,
-            globalAngleOn: false,
-        });
-        const globalAngleOn = ref(false);
-
-        function onGlobalAngleOn(event: MouseEvent) {
-            state.globalAngleOn = (event.target as HTMLInputElement).checked;
-
-            console.log('onGlobalAngleOn', state.globalAngleOn, boxes.value);
-
-            if (state.globalAngleOn) {
-                boxes.value.forEach((box) => box.angle = state.globalAngle);
-                console.log('a', state.globalAngle, boxes.value);
-            }
-        }
-
-        watch(() => state.globalAngle, () => {
-            if (state.globalAngleOn) {
-                boxes.value.forEach((box) => box.angle = state.globalAngle);
-                console.log('update');
-            }
-        });
-
-        return {
-            //...toRefs(state)
-            state,
-            onGlobalAngleOn
-        }
-    }    
 
     export default defineComponent({
         setup() {
             let state = reactive<{
                     boxes: Box[];
                     optRotate: boolean,
-                    // globalAngle: number;
-                    // globalAngleOn: boolean;
                 }>({
                 boxes: [],
                 optRotate: false,
-                // globalAngle: 0,
-                // globalAngleOn: false,
             });
 
             onMounted(() => state.boxes.push(...generateRandomBoxes(1)));
 
             const clearBoxes = () => state.boxes = [];
             const addBox = () => state.boxes.push(generateRandomBox());
-            //const addBox = () => (state.boxes.push(generateRandomBox()), console.log('bb', gAngle));
             const addBoxes = () => state.boxes.push(...generateRandomBoxes(10));
 
-            const state2 = useGlobalRotationAngle(toRef(state, 'boxes'));
-            // const gAngle = useGlobalRotationAngle(toRef(state, 'boxes'));
+            const gAngle = useGlobalRotationAngle(toRef(state, 'boxes'));
 
-            const getBoxAngle = (box: Box) => state2.state.globalAngleOn ? state2.state.globalAngle : box.angle;
+            const getBoxAngle = (box: Box) => gAngle.state.globalAngleOn ? gAngle.state.globalAngle : box.angle;
 
             const { onRotate } = useTimeout(() => {
-                if (state2.state.globalAngleOn) {
-                    state2.state.globalAngle = (state2.state.globalAngle + 30)  % 360;
+                if (gAngle.state.globalAngleOn) {
+                    gAngle.state.globalAngle = (gAngle.state.globalAngle + 30)  % 360;
                 }
 
                 state.boxes.forEach((box) => {
-                    if (state2.state.globalAngleOn) {
-                       box.angle = state2.state.globalAngle;
+                    if (gAngle.state.globalAngleOn) {
+                       box.angle = gAngle.state.globalAngle;
                     } else {
                         box.angle = (box.angle + 30) % 360;
                     }
                 });
             });
-
-            // function onGlobalAngleOn(event: MouseEvent) {
-            //     state.globalAngleOn = (event.target as HTMLInputElement).checked;
-
-            //     if (state.globalAngleOn) {
-            //         state.boxes.forEach((box) => box.angle = state.globalAngle);
-            //         //console.log('a', state.globalAngle);
-            //     }
-            // }
-
-            // watch(() => state.globalAngle, () => {
-            //     if (state.globalAngleOn) {
-            //         state.boxes.forEach((box) => box.angle = state.globalAngle);
-            //         //console.log('update');
-            //     }
-            // });
 
             return {
                 ...toRefs(state),
@@ -155,8 +100,8 @@
                 addBoxes,
                 getBoxAngle,
                 onRotate,
-                ...toRefs(state2.state),
-                onGlobalAngleOn: state2.onGlobalAngleOn,
+                ...toRefs(gAngle.state),
+                onGlobalAngleOn: gAngle.onGlobalAngleOn,
             };
         },
     });

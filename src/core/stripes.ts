@@ -1,3 +1,4 @@
+import { reactive, Ref, ref, watch } from "vue";
 import { complete as colors } from './materialui-swatches';
 
 function rndInt(min: number, max: number, includeMax: 0 | 1 = 1): number {
@@ -89,3 +90,35 @@ export function useTimeout(timeoutFunc: () => void) {
         onRotate
     }
 }
+
+export function useGlobalRotationAngle(boxes: Ref<Box[]>) {
+
+    const state = reactive({
+        globalAngle: 0,
+        globalAngleOn: false,
+    });
+    const globalAngleOn = ref(false);
+
+    function onGlobalAngleOn(event: MouseEvent) {
+        state.globalAngleOn = (event.target as HTMLInputElement).checked;
+
+        console.log('onGlobalAngleOn', state.globalAngleOn, boxes.value);
+
+        if (state.globalAngleOn) {
+            boxes.value.forEach((box) => box.angle = state.globalAngle);
+            console.log('a', state.globalAngle, boxes.value);
+        }
+    }
+
+    watch(() => state.globalAngle, () => {
+        if (state.globalAngleOn) {
+            boxes.value.forEach((box) => box.angle = state.globalAngle);
+            console.log('update');
+        }
+    });
+
+    return {
+        state,
+        onGlobalAngleOn
+    }
+}    
