@@ -38,15 +38,17 @@
             </label>
             <label>
                 <input type="checkbox" @click="onGlobalAngleOn"> Use global angle
-                <input class="inp-text input-number" type="number" v-model="globalAngle">
+                <input class="inp-text input-number" type="text" v-model="globalAngle">
             </label>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-    import { defineComponent, onMounted, reactive, ref, watch } from "vue";
+    import { defineComponent, onMounted, reactive, ref, toRefs, watch } from "vue";
     import { Box, generateRandomBox, generateRandomBoxes, useTimeout } from '../core/stripes';
+
+    //TODO: Limit number of overlapping bars
 
     export default defineComponent({
         setup() {
@@ -73,26 +75,26 @@
                     state.globalAngle = (state.globalAngle + 30)  % 360;
                 }
 
-                state.boxes.forEach((_) => {
+                state.boxes.forEach((box) => {
                     if (state.globalAngleOn) {
-                       _.angle = state.globalAngle;
+                       box.angle = state.globalAngle;
                     } else {
-                        _.angle = (_.angle + 30) % 360;
+                        box.angle = (box.angle + 30) % 360;
                     }
                 });
             });
 
             function onGlobalAngleOn(event: MouseEvent) {
                 state.globalAngleOn = (event.target as HTMLInputElement).checked;
-                console.log('ev', state.globalAngleOn);
+
+                if (state.globalAngleOn) {
+                    state.boxes.forEach((box) => box.angle = state.globalAngle);
+                    console.log('a', state.globalAngle);
+                }
             }
 
-            // function getAngle(box: Box): number {
-            //     return state.globalAngleOn ? state.globalAngle : box.angle;
-            // }
-
             return {
-                ...state,
+                ...toRefs(state),
                 clearBoxes,
                 addBox,
                 addBoxes,
