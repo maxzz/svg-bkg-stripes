@@ -37,8 +37,8 @@ export type Box = {
     y: number;
     w: number;
     h: number;
-    a: number; // angle
-    cH: number; // color hue
+    angle: number; // angle in degrees
+    fill: number; // color hue
 };
 
 function initBox(): Box {
@@ -48,8 +48,8 @@ function initBox(): Box {
         y: 50,
         w: 40,
         h: 10,
-        a: 0,
-        cH: 0,
+        angle: 0,
+        fill: 0,
     };
 }
 
@@ -59,7 +59,7 @@ export function generateRandomBox(): Box {
     box.h = rnd(1, 3);
     box.x = rnd(0, CONST.SCENE_W - box.w);
     box.y = rnd(0, CONST.SCENE_H - box.h);
-    box.cH = getRandomPalleteColor();
+    box.fill = getRandomPalleteColor();
     return box;
 }
 
