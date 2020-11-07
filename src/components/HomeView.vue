@@ -15,8 +15,16 @@
                     </linearGradient>
                 </defs>
 
-                <rect width="100" height="100" stroke="url(#bkg-frame)" stroke-width=".5" fill="aliceblue" />
+                <rect width="100%" height="100%" stroke="url(#bkg-frame)" stroke-width=".5" fill="aliceblue" />
                 <circle cx="50%" cy="50%" r=".5" stroke="red" stroke-width=".2" fill="none" />
+
+                <!-- <rect x="0" y="0" width="100%" height="4px" stroke="none" fill="green" transform="rotate(45, 50, 2) translate(50, 50)" />
+                <circle :cx="`${0 + 100 / 2}`" :cy="`${0 + 4 / 2}`" r="1" fill="blue" /> -->
+
+                <g transform="rotate(45, 50, 50) ">
+                    <rect width="100%" height="4px" stroke="none" fill="green" />
+                    <circle :cx="`${0 + 100 / 2}`" :cy="`${0 + 4 / 2}`" r="1" fill="blue" />
+                </g>
 
                 <rect
                     v-for="box in boxes"
