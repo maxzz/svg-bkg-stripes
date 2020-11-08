@@ -21,9 +21,9 @@
                 <!-- <rect x="0" y="0" width="100%" height="4px" stroke="none" fill="green" transform="rotate(45, 50, 2) translate(50, 50)" />
                 <circle :cx="`${0 + 100 / 2}`" :cy="`${0 + 4 / 2}`" r="1" fill="blue" /> -->
 
-                <g transform="rotate(45, 50, 50) ">
+                <g transform="rotate(45 50 2)">
                     <rect width="100%" height="4px" stroke="none" fill="green" />
-                    <circle :cx="`${0 + 100 / 2}`" :cy="`${0 + 4 / 2}`" r="1" fill="blue" />
+                    <circle cx="50" cy="2" r="1" fill="blue" />
                 </g>
 
                 <rect
